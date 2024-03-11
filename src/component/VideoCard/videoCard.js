@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillHeart, AiFillLike } from "react-icons/ai";
 import VideoLength from "../Shared/videoLength";
@@ -7,6 +7,8 @@ const VideoCard = ({ video, currentPage }) => {
   const [isLiked, setIsLiked] = useState(video?.reaction?.voted || false);
   const [likeCount, setLikeCount] = useState(video?.reaction?.count || 0);
   const [commentCount, setCommentCount] = useState(video?.comment?.count || 0);
+
+  const [comments, setComments] = useState([]);
   const videoTimeInSeconds = 840; // hardcoded, dynamic approach found using flv lib for frontend
 
   const handleLike = (e) => {
@@ -15,11 +17,6 @@ const VideoCard = ({ video, currentPage }) => {
     setLikeCount((prevLikeCount) =>
       isLiked ? prevLikeCount - 1 : prevLikeCount + 1
     );
-  };
-
-  const handleComment = (e) => {
-    e.preventDefault();
-    setCommentCount((prevCommentCount) => prevCommentCount + 1);
   };
 
   return (
@@ -55,14 +52,16 @@ const VideoCard = ({ video, currentPage }) => {
               {video.submission.title}
             </h2>
           )}
-         
+
+          {/* Comments Section */}
+          <div className="text-sm text-gray-400 mb-2">
+            {comments.map((comment) => (
+              <div key={comment.id}>{comment.text}</div>
+            ))}
+          </div>
           <div className="flex justify-between text-sm text-gray-400 items-center">
-            <div
-              className="cursor-pointer hover:text-white rounded-md p-2 bg-blue-500"
-              onClick={handleComment}
-            >
-              <span className="text-xl pr-2">💬</span>
-              <span>Comments</span>
+            <div className="cursor-pointer hover:text-white rounded-md p-2 bg-blue-500">
+              <span className="ml-1">Comments</span>
             </div>
             <div
               className="cursor-pointer hover:text-white rounded-md p-2 flex items-center"
